@@ -40,7 +40,6 @@ def fetch_blog(post_id):
         'post': formatted_post
     }), 200
 
-""" Endpoint to delete single post or blog """
 @app.route('/api/v1/posts/<int:post_id>', methods=['DELETE'])
 def delete_post(post_id):
     # Query a single post from the database based on the provided post_id
@@ -53,13 +52,10 @@ def delete_post(post_id):
     try:
         # Delete the post from the database
         post.delete()
-        return {
-            'message': 'Post deleted successfully',
-              'success': True
-              }, 200
+        return {'message': 'Post deleted successfully', 'success': True}, 200
     except Exception as e:
         # If an exception occurs (e.g., database error), return a 500 Internal Server Error status code
-      
+        return {'message': 'Error occurred while deleting the post', 'error_code': '500'}, 500
 
 """Endpoint to create a new blog or post"""
 @app.route('/api/v1/new-post', methods=['POST'])
