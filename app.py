@@ -2,57 +2,56 @@ from flask import Flask, jsonify, render_template,request, abort
 import os
 from flask_cors import CORS
 from .models import app, setup_db, db_drop_and_create_all
-from .models import User, Posts
+from .models import Users, Posts
 
 
 @app.route('/blogs', methods=['GET'])
-def current_loans():
-    loans = Posts.query.all()
-    formatted_current_loans = [loan.format() for loan in loans]
+def current_blogs():
+    blogs = Posts.query.all()
+    formatted_blogs = [blog.format_record() for blog in blogs]
     return jsonify({
             'success': True,
-            'loans': formatted_current_loans,
-            'total_loans':len(formatted_current_loans)
+            'blogs': formatted_blogs,
+            'number_of_blogs':len(formatted_blogs)
         }),200
     
 
 
-@main.route('/loan-status/<int:account_number>')
-def get_loan_status(account_number):
-    # account_number = AccountNumber.query.filter(AccountNumber.account_number == account_number).one_or_none()
-    # if account_number is None:
-    #     # abort(404)
-    #     return {'message': 'Account number not found', 'error_code': '404'}, 404
-    # if account_number:
-    #     validate_account(account_number)
-    loan_status = CurrentLoan.query.filter(CurrentLoan.customer_identifier == account_number and CurrentLoan.loan_identifier == "active").all()
-    if len(loan_status) == 0:
-        return {'message': 'No loan found', 'error_code': '200'}, 200
-    else:
-        formatted_outstanding_loans = [loan.format() for loan in loan_status]
-        return jsonify({
-            'success': True,
-            'loans': formatted_outstanding_loans,
-            'total_loans':len(formatted_outstanding_loans)
-            }),200
+@app.route('/post/<int:post_id>',methods=['GET'])
+def fetch_blog(post_id):
+    post = Posts.query.filter(Posts.id == post_id).first()
 
-@app.route('/new-account-number', methods=['POST'])
-def create_account_number():
+    if post is None:
+        return {'message': 'Post not found', 'error_code': '404'}, 404
+
+    formatted_post = post.format_record()
+    return jsonify({
+        'success': True,
+        'post': formatted_post
+    }), 200
+
+@app.route('/new-post', methods=['POST'])
+def add_blog():
     body = request.get_json()
-    new_account_number = body.get('account_number', None)
+    title = body.get('title', None)
+    description = body.get('description', None)
     try:
-        account_number = AccountNumber(account_number=new_account_number)
-        print(account_number)
-        account_number.insert()
-        
-        # selection = AccountNumber.query.order_by(AccountNumber.id).all()
-        # account_numbers = paginate_accounts(request, selection)
-        
+        title = Posts(title==title)
+        print(title)
+        description = Posts(description==description)
+        print(description)
+
+        new_blog = Posts(title=title, description=description)
+
+        # add the new blog to the database
+        new_blog.insert()
+        print("New Blog has been created successfully")
+
+                
         return jsonify({
                 'success': True,
-                'created': account_number.id,
-                # 'account_numbers': account_numbers,
-                'NO of account_numbers': len(AccountNumber.query.all())
+                'created': new_blog.id,
+                'Number of blogs': len(Posts.query.all())
             })
     except:
         abort(422)                      
