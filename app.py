@@ -4,7 +4,7 @@ from flask_cors import CORS
 from .models import app, setup_db, db_drop_and_create_all
 from .models import Users, Posts
 
-"""Endpoint to fetch all blogs or posts"""
+""" Endpoint to fetch all blogs or posts """
 @app.route('/api/v1/posts', methods=['GET'])
 def current_blogs():
     blogs = Posts.query.all()
@@ -16,9 +16,9 @@ def current_blogs():
         }),200
     
 """ Endpoint to fetch single post or  blog """
-@app.route('/api/v1/post/<int:post_id>',methods=['GET'])
+@app.route('/api/v1/posts/<int:post_id>',methods=['GET'])
 def fetch_blog(post_id):
-    post = Posts.query.filter(Posts.id == post_id).first()
+    post = Posts.query.filter(Posts.id == post_id).one_or_none()
 
     if post is None:
         return {'message': 'Post not found', 'error_code': '404'}, 404
