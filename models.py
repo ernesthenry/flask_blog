@@ -43,14 +43,28 @@ class Posts(db.Model):
     __tablename__='blogs'
 
     id=db.Column(db.Integer(), primary_key=True)
-    name=db.Column(db.String(100),unique=True)
+    title=db.Column(db.String(100),unique=True)
     description=db.Column(db.String(100))
     
 
-    def __init__ (self,name,description):
-        self.name=name
+    def __init__ (self,title,description):
+        self.title=title
         self.description=description
 
     def insert(self):
         db.session.add(self)
         db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format_record(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'desciption': self.description,
+        }        
