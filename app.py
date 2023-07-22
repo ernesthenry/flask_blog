@@ -4,8 +4,8 @@ from flask_cors import CORS
 from .models import app, setup_db, db_drop_and_create_all
 from .models import Users, Posts
 
-
-@app.route('/blogs', methods=['GET'])
+"""Endpoint to fetch all blogs or posts"""
+@app.route('/posts', methods=['GET'])
 def current_blogs():
     blogs = Posts.query.all()
     formatted_blogs = [blog.format_record() for blog in blogs]
@@ -15,8 +15,7 @@ def current_blogs():
             'number_of_blogs':len(formatted_blogs)
         }),200
     
-
-
+""" Endpoint to fetch single post or  blog """
 @app.route('/post/<int:post_id>',methods=['GET'])
 def fetch_blog(post_id):
     post = Posts.query.filter(Posts.id == post_id).first()
@@ -30,6 +29,8 @@ def fetch_blog(post_id):
         'post': formatted_post
     }), 200
 
+
+"""Endpoint to create a new blog or post"""
 @app.route('/new-post', methods=['POST'])
 def add_blog():
     body = request.get_json()
