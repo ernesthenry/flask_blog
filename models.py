@@ -3,15 +3,14 @@ from flask import Flask,render_template,request,url_for,redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-
 app=Flask(__name__)
 db= SQLAlchemy()
 migrate=Migrate(app,db)
 
 def setup_db(app):
 
-    database_name='sql'
-    default_database_path="postgresql://{}:{}@{}/{}".format('postgres',123,'localhost:5432',database_name)
+    database_name='blog'
+    default_database_path="postgresql://{}:{}@{}/{}".format('blog',123,'localhost:5432',database_name)
     app.config['SQLALCHEMY_DATABASE_URI']=default_database_path
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
