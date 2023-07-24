@@ -58,7 +58,6 @@ def delete_post(post_id):
         # If an exception occurs (e.g., database error), return a 500 Internal Server Error status code
         return {'message': 'Error occurred while deleting the post', 'error_code': '500'}, 500
 
-
 """Endpoint to create a new blog or post"""
 @app.route('/api/v1/new-post', methods=['POST'])
 def add_blog():
