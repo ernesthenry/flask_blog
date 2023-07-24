@@ -20,8 +20,8 @@ migrate = Migrate(app, db)
 # Setup the database for the Flask app.
 def setup_db(app):
     # Database configuration.
-    database_name = 'blog'
-    default_database_path = "postgresql://{}:{}@{}/{}".format('blog', 123, 'localhost:5432', database_name)
+    database_name = 'sql'
+    default_database_path = "postgresql://{}:{}@{}/{}".format('postgres', 123, 'localhost:5432', database_name)
     app.config['SQLALCHEMY_DATABASE_URI'] = default_database_path
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
